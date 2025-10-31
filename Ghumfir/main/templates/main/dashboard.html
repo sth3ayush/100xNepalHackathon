@@ -71,6 +71,30 @@
         </div>
 
     </div>
+
+    <div class="guide-listing-container">
+        <h2 class="guide-listing-title">Meet your local guides</h2>
+
+        <div class="guide-card-grid">
+            {% for guide in guides %}
+            <div class="guide-card">
+                <img src="{{guide.user.profile_picture.url}}" alt="Guide 1" class="guide-card-img">
+                <div class="guide-card-info">
+                    <h3 class="guide-card-name">{{guide.user.first_name}} {{guide.user.last_name}}</h3>
+                    <p class="guide-card-rating">{% for _ in guide.stars %}★{% endfor %}({{guide.trip_completed}})</p>
+                    <p class="guide-card-location">{{guide.primary_location}}</p>
+                    <p class="guide-card-languages">{{guide.languages}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="view-more">
+            <a href="{% url 'guide_listing' %}">
+                View More <i class="bi bi-arrow-right-circle"></i>
+            </a>
+        </div>
+    </div>
 </section>
 
 {% include 'SOS.html' %}
@@ -130,6 +154,17 @@
                 e.preventDefault();
                 alert("Please enter at least one keyword!");
             }
+        });
+    });
+
+
+    document.querySelectorAll('.view-more a').forEach(link => {
+        const icon = link.querySelector('i');
+        link.addEventListener('mouseenter', () => {
+            icon.classList.replace('bi-arrow-right-circle', 'bi-arrow-right-circle-fill');
+        });
+        link.addEventListener('mouseleave', () => {
+            icon.classList.replace('bi-arrow-right-circle-fill', 'bi-arrow-right-circle');
         });
     });
 </script>

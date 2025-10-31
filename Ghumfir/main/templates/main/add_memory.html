@@ -9,7 +9,7 @@
         <div class="form-body">
             <div class="form-user-info">
                 {% if user.profile_picture %}
-                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User">
+                    <img src="{{user.profile_picture.url}}" alt="User">
                 {% else %}
                     <span class="form-profile-image">{{ user.first_name|slice:":1"|capfirst }}</span>
                 {% endif %}

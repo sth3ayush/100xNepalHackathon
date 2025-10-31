@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="hero-controls-home" style="padding-top: 16px;">
+    <form method="get" action="{% url 'guide_listing' %}" class="searchbar-home" role="search">
+        <button type="submit" class="search-icon-btn-home" aria-label="Search">
+            <i class="bi bi-search"></i>
+        </button>
+        <input id="search-home" type="search" placeholder="Search guide by place or name..." autocomplete="off"
+            name="q" />
+    </form>
+    <div class="memory-count" id="memory-count-msg" style="font-size: 12px;">{{guide_count}} results {% if search_query %} for {{search_query}} {% endif %}</div>
+</div>
+
+<div class="guide-listing-container">
+    <!-- <h2 class="guide-listing-title">Meet your local guides</h2> -->
+
+    <div class="guide-card-grid">
+        {% for guide in guides %}
+        <div class="guide-card">
+            <img src="{{guide.user.profile_picture.url}}" alt="Guide 1" class="guide-card-img">
+            <div class="guide-card-info">
+                <h3 class="guide-card-name">{{guide.user.first_name}} {{guide.user.last_name}}</h3>
+                <p class="guide-card-rating">{% for _ in guide.stars %}★{% endfor %}({{guide.trip_completed}})</p>
+                <p class="guide-card-location">{{guide.primary_location}}</p>
+                <p class="guide-card-languages">{{guide.languages}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const memoryMsg = document.getElementById('memory-count-msg');
+        if (memoryMsg) {
+            setTimeout(() => {
+                memoryMsg.style.transition = "opacity 0.5s ease";
+                memoryMsg.style.opacity = 0;
+                setTimeout(() => memoryMsg.remove(), 500);
+            }, 2000);
+        }
+    });
+</script>
+
+{% endblock %}

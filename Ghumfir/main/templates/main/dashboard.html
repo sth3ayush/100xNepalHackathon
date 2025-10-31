@@ -1,0 +1,137 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="dashboard">
+    <div class="welcome-text">
+        <h2>Welcome, {% if user.first_name %} {{user.first_name}} {% else %} User {% endif %}</h2>
+        <h4>Ready for your next adventure?</h4>
+    </div>
+
+    <div class="hero-controls-home" style="padding-top: 16px;">
+        <div class="searchbar-home" role="search">
+            <button class="search-icon-btn-home" aria-label="Search">
+                <i class="bi bi-search"></i>
+            </button>
+            <input id="search-home" type="search" placeholder="Search place, experience, or trail.."
+                autocomplete="off" />
+        </div>
+    </div>
+
+    <div class="welcome-container">
+        <form id="discoverForm" class="discover-places-wrapper" action="{% url 'dashboard' %}" method="get">
+            <div class="discover-top">
+                <h2>Discover new place</h2>
+                {% csrf_token %}
+
+                <div class="tag-input-container">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="tagInput" placeholder="Add keywords" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="selected-tags"></div>
+
+            <input type="hidden" id="q1" name="q1">
+            <input type="hidden" id="q2" name="q2">
+            <input type="hidden" id="q3" name="q3">
+
+            <button type="submit" id="discoverBtn" class="discover-btn">Discover</button>
+        </form>
+
+        <div class="memory-feed-container">
+            <div class="memory-feed">
+                <div class="memory-card">
+                    <img src="{% static 'images/champadevi.webp' %}" alt="Champadevi">
+                    <div class="memory-description">
+                        <h3 class="memory-location">Champadevi</h3>
+                        <h6 class="uploaded-by">by: Ravi</h6>
+                    </div>
+                </div>
+                <div class="memory-card">
+                    <img src="{% static 'images/marble-dada.png' %}" alt="Marble dada">
+                    <div class="memory-description">
+                        <h3 class="memory-location">Marble Dada</h3>
+                        <h6 class="uploaded-by">by: Prajwal</h6>
+                    </div>
+                </div>
+                <div class="memory-card">
+                    <img src="{% static 'images/balthali.jpg' %}" alt="Champadevi">
+                    <div class="memory-description">
+                        <h3 class="memory-location">Balthali</h3>
+                        <h6 class="uploaded-by">by: Rijan</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="feed-btn-container">
+                <a href="{% url 'add_memory' %}" class="add-memory-btn"><i class="bi bi-plus-circle"></i> Add your
+                    Memory</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% include 'SOS.html' %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const tagInput = document.getElementById("tagInput");
+        const selectedTags = document.querySelector(".selected-tags");
+        const form = document.getElementById("discoverForm");
+        const hiddenInputs = [
+            document.getElementById("q1"),
+            document.getElementById("q2"),
+            document.getElementById("q3")
+        ];
+        let chosenTags = [];
+
+        tagInput.addEventListener("keypress", e => {
+            if (e.key === "Enter" && tagInput.value.trim() !== "") {
+                e.preventDefault();
+                const tag = tagInput.value.trim();
+
+                if (chosenTags.length >= 3) {
+                    alert("You can only add up to 3 keywords!");
+                    tagInput.value = "";
+                    return;
+                }
+
+                if (!chosenTags.includes(tag)) {
+                    chosenTags.push(tag);
+
+                    const tagElem = document.createElement("div");
+                    tagElem.classList.add("selected-tag");
+                    tagElem.innerHTML = `<span>${tag}</span> <span class="remove">×</span>`;
+
+                    tagElem.querySelector(".remove").addEventListener("click", () => {
+                        chosenTags = chosenTags.filter(t => t !== tag);
+                        tagElem.remove();
+                        updateHiddenInputs();
+                    });
+
+                    selectedTags.appendChild(tagElem);
+                    updateHiddenInputs();
+                }
+
+                tagInput.value = "";
+            }
+        });
+
+        function updateHiddenInputs() {
+            hiddenInputs.forEach((input, i) => {
+                input.value = chosenTags[i] || "";
+            });
+        }
+
+        form.addEventListener("submit", e => {
+            if (chosenTags.length === 0) {
+                e.preventDefault();
+                alert("Please enter at least one keyword!");
+            }
+        });
+    });
+</script>
+
+{% endblock %}

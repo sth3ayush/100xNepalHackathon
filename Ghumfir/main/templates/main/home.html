@@ -1,0 +1,99 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<img src="{% static 'images/bg.png' %}" alt="Background" class="fullscreen-bgim">
+
+<section class="view1-home">
+  <h2 class="tagline-home">Feel the Earth, Share the Path, Keep the Memory</h2>
+
+  <h4 class="subtagline-home">Connecting travelers with local wisdom <br> Turning your footprints into forever
+    memories</h4>
+
+  <div class="hero-controls-home">
+    <div class="searchbar-home" role="search">
+      <button class="search-icon-btn-home" aria-label="Search">
+        <i class="bi bi-search"></i>
+      </button>
+      <input id="search-home" type="search" placeholder="Search place, experience, or trail.." autocomplete="off" />
+    </div>
+  </div>
+</section>
+
+<section class="view2-home">
+  <h2 class="feature-heading-home">Ghumfir</h2>
+  <h4 class="feature-subheading-home">supports travelers before, during, and after their trip</h4>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="icon green">
+        <i class="bi bi-map"></i>
+      </div>
+      <div class="content green">
+        <h3>Trail Updates</h3>
+        <p>Get reports on routes, trails, weather, teahouses, and more — shared by other travelers.</p>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon yellow">
+        <i class="bi bi-people-fill"></i>
+      </div>
+      <div class="content yellow">
+        <h3>Local Guide Network</h3>
+        <p>Find verified local guides for hikes or experiences. Each trip and rating increases their trust score.</p>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon green">
+        SOS
+      </div>
+      <div class="content green">
+        <h3>Smart Safety</h3>
+        <p>Instantly send your location, start video and audio recording, and alert your emergency contacts.</p>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon yellow">
+        <i class="bi bi-camera-fill"></i>
+      </div>
+      <div class="content yellow">
+        <h3>Memory Capsule</h3>
+        <p>Upload photos or short reels from your travels to help others experience Nepal more smoothly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view3-home">
+
+  <div class="rewards-header">
+    <div class="text">
+      <h2>Turn your adventures into rewards!</h2>
+      <p>
+        Collect Ghumfir Coins every time you share trail updates, add a new hidden gem, or post your travel memories
+      </p>
+    </div>
+    <div class="icon" style="background: url('{% static 'images/coin.png' %}') no-repeat right center / contain;">
+    </div>
+  </div>
+
+  <h3 class="sub-heading">Redeem your coins for</h3>
+
+  <div class="rewards-grid">
+    <div class="reward-box" style="background: url('{% static 'images/reward1.png' %}') no-repeat center center; background-size: cover;">
+      <p>Free Stays</p>
+    </div>
+    <div class="reward-box" style="background: url('{% static 'images/reward2.png' %}') no-repeat center center; background-size: cover;">
+      <p>Cozy Lunch</p>
+    </div>
+    <div class="reward-box box3" style="background: url('{% static 'images/ad.png' %}') no-repeat right center / contain;">
+    </div>
+  </div>
+
+</section>
+
+{% endblock %}

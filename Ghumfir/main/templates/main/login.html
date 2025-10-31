@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block content %}
+<div class="form-container">
+  <div class="login-signup-form-wrapper">
+    <div class="form-left">
+      <h2>Log In to your Account</h2>
+      <p>with Ghumfir</p>
+    </div>
+
+    <div class="form-right">
+      <form action="{% url 'login' %}" method="POST" class="login-signup-form">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Enter Email" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+
+        <button type="submit" class="login-signup-btn">Login</button>
+
+        <p class="optional-login-signup">
+          Don't have an account? <a href="{% url 'signup' %}">SignUp</a>
+        </p>
+
+        <p class="form-divider">or</p>
+
+        <a href="{% provider_login_url 'google' %}?next=/" class="google-btn">
+          <i class="bi bi-google"></i>
+          Log In with Google
+        </a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="guide-form-container">
+    <h2>Become a Guide</h2>
+
+    <form method="POST" enctype="multipart/form-data" action="{% url 'become_guide' %}">
+        {% csrf_token %}
+
+        <div class="guide-form-profile">
+            <div class="guide-form-profile-pic-wrapper">
+                {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" id="guide-form-user-profile-img">
+                {% else %}
+                <img id="guide-form-user-profile-img" style="display:none;">
+                <div class="guide-form-profile-circle-big" id="guide-form-user-profile-placeholder">
+                    {% if user.first_name %}
+                    {{ user.first_name|slice:":1"|capfirst }}
+                    {% else %}
+                    {{ user.email|slice:":1"|capfirst }}
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <label for="guide-form-user-profile-picture" class="guide-form-profile-upload-overlay">
+                    <i class="bi bi-camera-fill"></i>
+                </label>
+                <input type="file" id="guide-form-user-profile-picture" name="profile_picture" accept="image/*"
+                    onchange="guideFormUserProfilePreview(event)" style="display:none;">
+            </div>
+
+            <div class="guide-form-profile-details">
+                <input type="text" name="first_name" value="{{ user.first_name|default_if_none:'' }}"
+                    placeholder="Enter First Name" class="guide-form-input-field">
+
+                <input type="text" name="last_name" value="{{ user.last_name|default_if_none:'' }}"
+                    placeholder="Enter Last Name" class="guide-form-input-field">
+
+                <input type="text" name="mobile_no" value="{{ user.mobile_no|default_if_none:'' }}"
+                    placeholder="Enter Phone Number" class="guide-form-input-field">
+            </div>
+        </div>
+
+        <div class="guide-flex">
+            <div class="guide-column">
+                <label for="primary_location">Primary Location:</label>
+                <input type="text" name="primary_location" id="guide-form-primary-location" required placeholder="Primary Location">
+
+                <label for="secondary_location">Secondary Location (optional):</label>
+                <input type="text" name="secondary_location" id="guide-form-secondary-location" placeholder="Secondary Location">
+
+                <label for="languages">Languages Known:</label>
+                <div class="small-text">Separate languages with commas</div>
+                <input type="text" name="languages" id="guide-form-languages" placeholder="e.g. Nepali, English, ..."
+                    required>
+
+                <label for="specialization">Specialization (optional):</label>
+                <input type="text" name="specialization" id="guide-form-specialization" placeholder="e.g. Trekking, Hiking, ....">
+            </div>
+
+            <div class="guide-column">
+                <label>Experience:</label>
+                <div class="radio-group">
+                    {% for value, display in experience_choices %}
+                    <label>
+                        <input type="radio" name="experience" value="{{ value }}" required>
+                        {{ display }}
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <label>Licensed Guide:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="licenced" value="yes" required> Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="licenced" value="no" required> No
+                    </label>
+                </div>
+
+                <label for="rate_per_hour">Rate per Hour:</label>
+                <input type="number" name="rate_per_hour" id="guide-form-rate-per-hour" step="0.01" required placeholder="Rate in (NRP) per hour">
+            </div>
+        </div>
+
+        <div class="guide-description">
+            <label for="description">Description / Bio:</label>
+            <textarea name="description" id="guide-form-description"
+                placeholder="Write a short bio about your experience, skills, and the kind of tours you provide..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+</div>
+
+<script>
+    function guideFormUserProfilePreview(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const imgPreview = document.getElementById('guide-form-user-profile-img');
+            const placeholder = document.getElementById('guide-form-user-profile-placeholder');
+            if (placeholder) placeholder.style.display = 'none';
+            if (imgPreview) {
+                imgPreview.src = reader.result;
+                imgPreview.style.display = 'block';
+            }
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+{% endblock %}

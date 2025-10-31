@@ -1,0 +1,115 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="hero-controls-home" style="padding-top: 16px;">
+  <form method="get" action="{% url 'memory_capsule' %}" class="searchbar-home" role="search">
+    <button type="submit" class="search-icon-btn-home" aria-label="Search">
+      <i class="bi bi-search"></i>
+    </button>
+    <input id="search-home" type="search" placeholder="Search memory by place..." autocomplete="off" name="q"/>
+  </form>
+  <div class="memory-count" id="memory-count-msg" style="font-size: 12px;">{{memory_count}} results {% if search_query %} for {{search_query}} {% endif %}</div>
+</div>
+
+<div class="memory-images-container">
+  {% for item in memory_data %}
+  <img src="{{ item.images.first.file.url }}" alt="{{ item.memory.location_name }}" class="memory-thumb"
+    data-id="{{ forloop.counter0 }}">
+  {% endfor %}
+</div>
+
+<div id="memoryModal" class="memory-modal">
+  <div class="memory-box" id="memoryBox">
+    <button class="memory-close-btn" id="closeBtn">&times;</button>
+
+    <div class="memory-content">
+      <div class="memory-left">
+        <img id="mainImage" class="main-image" src="" alt="">
+        <div class="indicator-dots" id="indicatorDots"></div>
+      </div>
+
+      <div class="memory-right">
+        <div class="memory-header">
+          <h2 id="memoryTitle"></h2>
+          <p id="memoryDate"></p>
+        </div>
+
+        <div class="memory-details" id="memoryDetails"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("memoryModal");
+  const closeBtn = document.getElementById("closeBtn");
+  const mainImage = document.getElementById("mainImage");
+  const memoryTitle = document.getElementById("memoryTitle");
+  const memoryDate = document.getElementById("memoryDate");
+  const memoryDetails = document.getElementById("memoryDetails");
+  const indicatorDots = document.getElementById("indicatorDots");
+
+  const thumbs = document.querySelectorAll(".memory-thumb");
+
+  const memoryList = [
+    {% for item in memory_data %}
+  {
+    title: "{{ item.memory.location_name }}",
+      created_at: "{{ item.memory.created_at|date:'M d, Y' }}",
+        details: "Shared by {{ item.memory.user.first_name }} {{ item.memory.user.last_name }}",
+          images: [
+            {% for img in item.images %}
+  "{{ img.file.url }}",
+    {% endfor %}
+        ]
+      },
+  {% endfor %}
+  ];
+
+  thumbs.forEach((thumb, index) => {
+    thumb.addEventListener("click", () => {
+      const memory = memoryList[index];
+      let currentImage = 0;
+
+      memoryTitle.textContent = memory.title;
+      memoryDate.textContent = memory.created_at;
+      memoryDetails.innerHTML = `<p>${memory.details}</p>`;
+      mainImage.src = memory.images[currentImage];
+
+      indicatorDots.innerHTML = memory.images
+        .map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`)
+        .join("");
+
+      indicatorDots.querySelectorAll(".dot").forEach(dot => {
+        dot.addEventListener("click", (e) => {
+          document.querySelectorAll(".dot").forEach(d => d.classList.remove("active"));
+          e.target.classList.add("active");
+          currentImage = parseInt(e.target.dataset.index);
+          mainImage.src = memory.images[currentImage];
+        });
+      });
+
+      modal.classList.add("active");
+    });
+  });
+
+  closeBtn.addEventListener("click", () => modal.classList.remove("active"));
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("active");
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+      const memoryMsg = document.getElementById('memory-count-msg');
+      if(memoryMsg) {
+          setTimeout(() => {
+              memoryMsg.style.transition = "opacity 0.5s ease";
+              memoryMsg.style.opacity = 0;
+              setTimeout(() => memoryMsg.remove(), 500);
+          }, 2000); 
+      }
+  });
+
+</script>
+{% endblock %}

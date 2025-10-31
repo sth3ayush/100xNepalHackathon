@@ -1,0 +1,37 @@
+{% load static %}
+
+<footer class="footer">
+    <div class="main-container footer-container">
+        <div class="footer-left">
+            <div class="footer-logo">
+                Ghumfir <img src="{% static 'images/logo-inv.png' %}" alt="logo" height="32px">
+            </div>
+            <div class="footer-tagline">
+                The web app that makes exploring Nepal safer, smarter, and more rewarding through community-powered travel.
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <div class="footer-right-section1">
+                <li><a href="#">Places</a></li>
+                <li><a href="#">Hotels and lodges</a></li>
+                <li><a href="#">Experience</a></li>
+                <li><a href="#">Guides</a></li>
+                <li><a href="#">Redeem</a></li>
+            </div>
+
+            <div class="footer-right-section2">
+                <li id="footer-contact">Contact</li>
+                <li><a href="#">Support</a></li>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const footerContact = document.getElementById("footer-contact");
+
+    footerContact.addEventListener("click", function() {
+        footerContact.innerHTML = "sth3ayush001@gmail.com";
+    });
+</script>

@@ -1,0 +1,164 @@
+:root {
+  --most-used-text-color: #222222;
+  --primary-text-color: #274c3f;
+  --secondary-text-color: #d4a52e;
+  --primary-bg-color: #f2f0ef;
+  --secondary-bg-color: #636b2f;
+  --gray: #d9d9d9;
+}
+
+@font-face {
+  font-family: "Circular-medium";
+  src: url("../fonts/circular-medium.ttf") format("truetype");
+}
+
+.user-profile-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    padding: 30px 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.user-profile-pic-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.user-profile-pic {
+    position: relative;
+    width: 140px;
+    height: 140px;
+}
+
+.user-profile-pic img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-text-color);
+    display: block;
+    background-color: var(--most-used-text-color); /* fallback background while loading */
+}
+
+
+/* 🔵 Default Circle with Initial */
+.user-profile-circle-big {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: var(--most-used-text-color);
+    color: var(--primary-bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: 600;
+    border: 4px solid var(--primary-text-color);
+}
+
+/* Camera overlay */
+.user-profile-upload-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--primary-text-color);
+    color: white;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    border: 2px solid #fff;
+    transition: background 0.3s;
+}
+
+.user-profile-upload-overlay:hover {
+    background: var(--secondary-text-color);
+}
+
+/* Hide File Input */
+#user-profile-picture {
+    display: none;
+}
+
+.user-profile-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--most-used-text-color);
+    margin-top: 15px;
+    margin-bottom: 4px;
+}
+
+.user-profile-email {
+    font-size: 14px;
+    color: #65676b;
+    margin-bottom: 20px;
+}
+
+.user-profile-input-field {
+    width: 90%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+    transition: border 0.2s;
+    background-color: #fff;
+}
+
+.user-profile-input-field:focus {
+    outline: none;
+    border-color: var(--primary-text-color);
+    background-color: #fff;
+}
+
+.user-profile-update-btn {
+    background: var(--primary-text-color);
+    color: #fff;
+    padding: 12px;
+    border: none;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.user-profile-update-btn:hover {
+    background: var(--secondary-text-color);
+}
+
+@media (max-width: 600px) {
+    .user-profile-card {
+        padding: 20px;
+    }
+
+    .user-profile-pic,
+    .user-profile-pic img,
+    .user-profile-circle-big {
+        width: 110px;
+        height: 110px;
+    }
+
+    .user-profile-circle-big {
+        font-size: 38px;
+    }
+
+    .user-profile-name {
+        font-size: 20px;
+    }
+
+    .user-profile-input-field {
+        font-size: 14px;
+    }
+
+    .user-profile-update-btn {
+        font-size: 15px;
+    }
+}

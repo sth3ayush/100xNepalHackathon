@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ghumfir</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <link rel="icon" type="image/png" href="{% static 'images/Ghumfir.png' %}" />
+
+  <link rel="stylesheet" href="{% static 'styles/main.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/nav.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/message.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/footer.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/login-signup.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'styles/user_profile.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'styles/memory_capsule.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'styles/memory_form.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'styles/SOS.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/become_guide.css' %}" />
+  
+</head>
+
+<body>
+  <div class="main-container">
+    {% include 'nav.html' %} {% include 'message.html' %}
+
+    <div class="main-content">{% block content %} {% endblock %}</div>
+  </div>
+  {% if display_footer %}
+  <style>
+    .navbar {
+      background: transparent;
+    }
+  </style>
+  {% include 'footer.html' %} {% endif %}
+</body>
+
+</html>

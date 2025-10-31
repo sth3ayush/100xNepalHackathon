@@ -1,0 +1,154 @@
+.memory-images-container {
+  width: min(1200px, 90%);
+  margin: 40px auto;
+  columns: 3 300px;
+  column-gap: 16px;
+}
+
+.memory-images-container img {
+  width: 100%;
+  display: block;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.memory-images-container img:hover {
+  transform: scale(1.02);
+}
+
+.memory-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.memory-modal.active {
+  display: flex;
+}
+
+.memory-box {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  overflow: hidden;
+  padding: 16px;
+}
+
+.memory-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #333;
+  z-index: 2;
+}
+
+.memory-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Image */
+.memory-left {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  max-height: 55vh;
+  object-fit: contain;
+  border-radius: 16px;
+}
+
+.indicator-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.indicator-dots .dot {
+  width: 8px;
+  height: 8px;
+  background: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.indicator-dots .dot.active {
+  background: #2d6a4f;
+  width: 18px;
+  border-radius: 6px;
+}
+
+.memory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.memory-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #222;
+  flex: 1;
+}
+
+.memory-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+.memory-details {
+  width: 100%;
+  overflow-y: auto;
+  color: #333;
+  line-height: 1.4;
+  margin-top: 8px;
+  flex: 1;
+  padding-right: 4px;
+}
+
+.memory-details::-webkit-scrollbar {
+  display: none;
+}
+.memory-details {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (max-width: 600px) {
+  .memory-box {
+    max-width: 95%;
+    padding: 12px;
+  }
+}

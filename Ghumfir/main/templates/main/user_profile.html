@@ -1,0 +1,76 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="form-container">
+    <div class="user-profile-card">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'user_profile' %}">
+            {% csrf_token %}
+
+            <!-- Profile Picture Section -->
+            <div class="user-profile-pic-wrapper">
+                <div class="user-profile-pic">
+
+                    {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" id="user-profile-preview-img"
+                        style="display: block;">
+                    {% else %}
+                    <img id="user-profile-preview-img" style="display: none;">
+                    <div class="user-profile-circle-big" id="user-profile-preview-placeholder">
+                        {% if user.first_name %}
+                        {{ user.first_name|slice:":1"|capfirst }}
+                        {% else %}
+                        {{ user.email|slice:":1"|capfirst }}
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <label for="user-profile-picture" class="user-profile-upload-overlay">
+                        <i class="bi bi-camera-fill"></i>
+                    </label>
+                    <input type="file" id="user-profile-picture" name="profile_picture" accept="image/*"
+                        onchange="userProfilePreviewImage(event)">
+                </div>
+            </div>
+
+            <div class="user-profile-details">
+                <h2 class="user-profile-name">
+                    {% if user.first_name %}
+                    {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                    Enter First Name
+                    {% endif %}
+                </h2>
+                <p class="user-profile-email">{{ user.email }}</p>
+
+                <input type="text" name="first_name" value="{{ user.first_name|default_if_none:'' }}"
+                    placeholder="Enter First Name" class="user-profile-input-field">
+
+                <input type="text" name="last_name" value="{{ user.last_name|default_if_none:'' }}"
+                    placeholder="Enter Last Name" class="user-profile-input-field">
+
+                <input type="text" name="mobile_no" value="{{ user.mobile_no|default_if_none:'' }}"
+                    placeholder="Enter Phone Number" class="user-profile-input-field">
+
+                <button type="submit" class="user-profile-update-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function userProfilePreviewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const imgPreview = document.getElementById('user-profile-preview-img');
+            const placeholder = document.getElementById('user-profile-preview-placeholder');
+            if (placeholder) placeholder.style.display = 'none';
+            if (imgPreview) {
+                imgPreview.src = reader.result;
+                imgPreview.style.display = 'block';
+            }
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form">
+        <div class="form-header">Create Memory</div>
+
+        <div class="form-body">
+            <div class="form-user-info">
+                {% if user.profile_picture %}
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User">
+                {% else %}
+                    <span class="form-profile-image">{{ user.first_name|slice:":1"|capfirst }}</span>
+                {% endif %}
+                <div>
+                    <div class="form-user-name">{{user.first_name}} {{user.last_name}}</div>
+                </div>
+            </div>
+
+            <form id="memoryForm" method="POST" enctype="multipart/form-data" action="{% url 'add_memory' %}">
+                {% csrf_token %}
+                <textarea name="location_name" placeholder="Where did this memory happen?" required></textarea>
+
+                <div class="form-preview-area" id="previewArea"></div>
+
+                <div class="form-footer">
+                    <label class="add-files">
+                        <i class="bi bi-camera"></i> Add photos/videos
+                        <input type="file" id="fileInput" name="files" multiple accept="image/*,video/*">
+                    </label>
+                    <button type="submit" class="post-btn">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const previewArea = document.getElementById('previewArea');
+
+    fileInput.addEventListener('change', () => {
+        previewArea.innerHTML = '';
+        const files = Array.from(fileInput.files);
+
+        if (files.length > 6) {
+            alert('You can upload a maximum of 6 files.');
+            fileInput.value = '';
+            return;
+        }
+
+        files.forEach((file, index) => {
+            const preview = document.createElement('div');
+            preview.classList.add('preview');
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (file.type.startsWith('image')) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                } else if (file.type.startsWith('video')) {
+                    preview.innerHTML = `<video src="${e.target.result}" controls></video>`;
+                }
+
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = '×';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.onclick = () => {
+                    const dt = new DataTransfer();
+                    const currentFiles = Array.from(fileInput.files);
+                    currentFiles.splice(index, 1);
+                    currentFiles.forEach(f => dt.items.add(f));
+                    fileInput.files = dt.files;
+                    preview.remove();
+                };
+                preview.appendChild(removeBtn);
+                previewArea.appendChild(preview);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+<button id="sosButton">SOS</button>
+<video id="preview" autoplay muted></video>
+
+<script>
+  let mediaRecorder;
+  let recordedChunks = [];
+  let stopTimeout;
+
+  const sosButton = document.getElementById("sosButton");
+  const preview = document.getElementById("preview");
+
+  const recordingIndicator = document.createElement("div");
+  recordingIndicator.id = "recordingIndicator";
+  recordingIndicator.textContent = "● Recording...";
+  recordingIndicator.style.display = "none";
+  document.body.appendChild(recordingIndicator);
+
+  let recording = false;
+
+  sosButton.addEventListener("click", async () => {
+    if (!recording) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) recordedChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(recordedChunks, { type: "video/webm" });
+          uploadVideo(blob);
+
+          recordingIndicator.style.display = "none";
+        };
+
+        mediaRecorder.start();
+        recordingIndicator.style.display = "block";
+        sosButton.classList.add("active");
+        recording = true;
+
+        stopTimeout = setTimeout(() => stopRecording(), 60000); //Stops recoding in 1 min if not stopped manually Can change the time
+      } catch (err) {
+        alert("Camera/Microphone access denied!");
+      }
+    } else {
+      stopRecording();
+    }
+  });
+
+  function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+      mediaRecorder.stop();
+      clearTimeout(stopTimeout);
+
+      if (preview.srcObject) {
+        preview.srcObject.getTracks().forEach((track) => track.stop());
+        preview.srcObject = null;
+      }
+
+      sosButton.classList.remove("active");
+      recordingIndicator.style.display = "none";
+      recording = false;
+    }
+  }
+
+  function uploadVideo(blob) {
+    const formData = new FormData();
+    formData.append("video", blob, "sos_recording.webm");
+
+    fetch(window.location.origin + "/upload_sos_video/", {
+      method: "POST",
+      body: formData,
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        console.log("Uploaded:", data);
+
+        if (data.status === "success") {
+          alert("🎥 SOS recording uploaded successfully!");
+        } else {
+          alert("⚠️ Upload failed: " + data.message);
+        }
+      })
+      .catch((err) => {
+        console.error("Upload failed:", err);
+        alert("Upload failed — check console for details.");
+      });
+  }
+</script>

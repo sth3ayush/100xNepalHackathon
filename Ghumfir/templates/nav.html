@@ -1,0 +1,113 @@
+{% load static %}
+<div class="navbar">
+    <div class="nav-left"><a href="{% url 'home' %}">Ghumfir <img src="{% static 'images/logo.png' %}" alt="logo"
+                height="32px"></a>
+    </div>
+    <ul class="nav-right">
+        {% if user.is_authenticated %}
+        <!-- <span class="notification-icon"><i class="bi bi-bell-fill" for="notification"></i><span class="notification-count">1</span></span> -->
+        <span class="point-container"><img src="{% static 'images/coin.png' %}" alt="GCoin">{{user.points}}</span>
+        {% if user.profile_picture %}
+        <div class="profile-circle me-3" style="cursor: pointer; 
+                background: url('{{ user.profile_picture.url }}') center center / cover no-repeat;">
+        </div>
+        {% else %}
+        <div class="profile-circle me-3" style="cursor: pointer; background-color: #222222;">
+            {{ user.first_name|slice:":1"|capfirst }}
+        </div>
+        {% endif %}
+        <div class="menu-icon d-none d-lg-flex">
+            <i class="bi bi-list"></i>
+        </div>
+        {% else %}
+        <a href="#" class="mbl-delete">
+            <li>Become a Guide</li>
+        </a>
+        <a href="{% url 'login' %}" class="nav-btn">
+            <li>Log In</li>
+        </a>
+        <a href="{% url 'signup' %}" class="nav-btn-inv">
+            <li>Sign Up</li>
+        </a>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="profile-card" id="profileCard">
+    {% if user.is_authenticated %}
+    {% if user.profile_picture %}
+        <div class="profile-circle-big" style="background: url('{{ user.profile_picture.url }}') center center / cover no-repeat;">
+        </div>
+        {% else %}
+        <div class="profile-circle-big" style="background-color: #222222;">
+            {{ user.first_name|slice:":1"|capfirst }}
+        </div>
+    {% endif %}
+    {% if user.first_name and user.last_name %}
+    <h4>{{user.first_name}} {{user.last_name}}</h4>
+    {% else %}
+    Guest User
+    {% endif %}
+    <div class="dropdown-separator"></div>
+    <p>Email:<br>{{user.email}}</p>
+    <a href="{% url 'user_profile' %}" class="account-btn">
+        <i class="bi bi-gear"></i> Update Account
+    </a>
+    {% endif %}
+</div>
+
+<div class="dropdown-card" id="dropdownMenu">
+    {% if not hide_nav_icons %}
+    <a href="{% url 'home' %}" class="dropdown-item"><i class="bi bi-house me-1"></i> Home</a>
+    <div class="dropdown-separator"></div>
+
+    <a href="#" class="dropdown-item">Become a Guide</a>
+
+    <div class="dropdown-separator"></div>
+
+    <a href="{% url 'logout' %}" class="dropdown-item">Log out</a>
+    <!-- {% else %}
+    <a href="#" class="dropdown-item"><i class="bi bi-bell"></i> Notifications
+        <span class="badge">1</span>
+    </a>
+    <a href="#" class="dropdown-item"><i class="bi bi-gear"></i> Account settings</a>
+    <a href="#" class="dropdown-item"><i class="bi bi-clock-history"></i> History</a>
+    <div class="dropdown-separator"></div>
+    <a href="{% url 'home' %}" class="dropdown-item">Switch to booking</a>
+    <div class="dropdown-separator"></div>
+    <a href="{% url 'logout' %}" class="dropdown-item">Log out</a>
+    {% endif %} -->
+</div>
+
+<script>
+    const profileIcons = document.querySelectorAll('.profile-circle');
+    const profileCard = document.getElementById('profileCard');
+
+    profileIcons.forEach(icon => {
+        icon.addEventListener('click', () => {
+            profileCard.style.display =
+                profileCard.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (![...profileIcons].some(icon => icon.contains(event.target)) && !profileCard.contains(event.target)) {
+            profileCard.style.display = 'none';
+        }
+    });
+
+    const menuIcons = document.querySelectorAll('.menu-icon'); // catch both desktop + mobile
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    menuIcons.forEach(icon => {
+        icon.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('active');
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (![...menuIcons].some(icon => icon.contains(event.target)) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.remove('active');
+        }
+    });
+</script>

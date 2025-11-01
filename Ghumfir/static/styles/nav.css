@@ -105,26 +105,26 @@
 }
 
 .notification-icon {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .notification-count {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  height: 14px;
-  width: 14px;
-  background-color: var(--secondary-text-color);
-  color: var(--primary-bg-color);
-  border-radius: 50%;
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    height: 14px;
+    width: 14px;
+    background-color: var(--secondary-text-color);
+    color: var(--primary-bg-color);
+    border-radius: 50%;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
 }
 
 .point-container {
@@ -134,19 +134,19 @@
     gap: 8px;
 }
 
-.point-container img{
+.point-container img {
     height: 30px;
 }
 
 .profile-card {
     position: absolute;
-    top: 70px; 
+    top: 70px;
     right: 20px;
     width: 250px;
     background: #ffffff;
     border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
     padding: 20px;
     display: none;
@@ -156,9 +156,9 @@
 .profile-card p {
     margin: 4px 0;
     font-size: 14px;
-    word-wrap: break-word;  
+    word-wrap: break-word;
     overflow-wrap: break-word;
-    white-space: normal; 
+    white-space: normal;
 }
 
 .profile-card h4 {
@@ -254,6 +254,46 @@
     margin: 8px 0;
 }
 
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 400px;
+    width: 100%;
+    padding: 10px 30px;
+    box-sizing: border-box;
+}
+
+.top-header a {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--most-used-text-color);
+    font-size: 24px;
+}
+
+.top-header a:hover {
+    color: var(--secondary-text-color);
+}
+
+@media (max-width: 500px) {
+    .top-header {
+      padding: 8px 20px;
+    }
+    .top-header a {
+      font-size: 20px;
+    }
+  }
+
+   @media (max-width: 400px) {
+    .top-header {
+      padding: 6px 12px;
+    }
+    .top-header a {
+      font-size: 16px;
+    }
+  }
 @media (max-width: 1400px) and (min-width: 601px) {
     .navbar {
         width: calc(100% - 48px) !important;
@@ -300,7 +340,7 @@
         height: 25px;
     }
 
-    .point-container img{
+    .point-container img {
         height: 20px;
     }
 }

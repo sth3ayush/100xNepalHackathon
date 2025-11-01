@@ -162,3 +162,12 @@ class Place(models.Model):
 
     def __str__(self):
         return self.name
+    
+class PlaceUpdate(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    update = models.CharField(max_length=250)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.place.name} - {self.user.email}: {self.update[:30]}"

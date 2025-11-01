@@ -1,2 +1,4 @@
 env
 Ghumfir/.env
+Ghumfir/db.sqlite3
+Ghumfir/Ghumfir/__pycache__

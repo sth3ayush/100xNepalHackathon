@@ -22,5 +22,6 @@ urlpatterns = [
 
     path('guide-profile/<str:pk>/', views.guideProfile, name="guide_profile"),
 
-    path('places/<int:pk>/', views.place_detail, name='place_detail'),
+    path('place/<int:pk>/', views.place_detail, name='place_detail'),
+    path('place-listing/', views.places_listing, name="place_listing"),
 ]

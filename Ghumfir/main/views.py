@@ -90,17 +90,13 @@ def logoutPage(request):
 @login_required(login_url='login')
 def dashboard(request):
     if request.method == "GET":
-        q1 = request.GET.get('q1', '')
-        q2 = request.GET.get('q2', '')
-        q3 = request.GET.get('q3', '')
-
-        print(f"{q1}, {q2}, {q3}")
+        q = request.GET.get('q', '')
 
     guides = GuideProfile.objects.order_by('-rating')[:4]
     for guide in guides:
         guide.stars = range(round(guide.rating))
 
-    context = {"guides": guides, 'display_footer': True}
+    context = {"guides": guides, 'display_footer': True, "top_header": True}
 
     return render(request, "main/dashboard.html", context)
 
@@ -125,7 +121,8 @@ def memoryCapsule(request):
     context = {
         "memory_data": memory_data,
         "search_query": q,
-        "memory_count": memory_count
+        "memory_count": memory_count,
+        "top_header": True
     }
     return render(request, "main/memory_capsule.html", context)
 
@@ -283,7 +280,7 @@ def guideListing(request):
 
     guide_count = guides.count()
 
-    context = {"guides": guides, 'display_footer': True, 'guide_count': guide_count, "search_query": q,}
+    context = {"guides": guides, 'display_footer': True, 'guide_count': guide_count, "search_query": q, "top_header": True}
     return render(request, "main/guide_listing.html", context)
 
 def guideProfile(request, pk):
@@ -294,3 +291,41 @@ def guideProfile(request, pk):
 def place_detail(request, pk):
     place = get_object_or_404(Place, pk=pk)
     return render(request, 'main/place_detail.html', {'place': place})
+
+def places_listing(request):
+    q1 = request.GET.get('q1', '').strip()
+    q2 = request.GET.get('q2', '').strip()
+    q3 = request.GET.get('q3', '').strip()
+
+    # List of searchable text fields
+    search_fields = [
+        'name', 'region', 'destination_type', 'best_season', 'starting_point',
+        'route_overview', 'ending_point', 'transportation_access', 'lodges_hotels',
+        'food_availability', 'adventure_type', 'cultural_attractions', 'language_customs',
+        'local_community', 'not_to_miss_spots', 'photography_hotspots', 'unique_traditions',
+        'wildlife_highlights'
+    ]
+
+    # Build Q object for a single keyword (matches any field)
+    def q_for_keyword(keyword):
+        q_obj = Q()
+        for field in search_fields:
+            q_obj |= Q(**{f"{field}__icontains": keyword})
+        return q_obj
+
+    # Combine all keywords using OR
+    combined_query = Q()
+    for keyword in [q1, q2, q3]:
+        if keyword:
+            combined_query |= q_for_keyword(keyword)
+
+    # Filter places
+    places = Place.objects.filter(combined_query).distinct()
+
+    # Convert to list of dictionaries for template
+    places_list = list(
+        places.values('id', 'name', 'region', 'latitude', 'longitude')
+    )
+
+    context = {'places': places_list, "top_header": True}
+    return render(request, 'main/place_listing.html', context)

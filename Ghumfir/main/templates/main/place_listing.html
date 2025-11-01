@@ -1,0 +1,145 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  /* Full width container */
+  .place-listing-container {
+    display: flex;
+    width: 100%;
+    height: 100vh; /* full viewport height */
+    gap: 0;
+  }
+
+  /* Sidebar */
+  .place-listing-sidebar {
+    width: 35%;
+    background-color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+  }
+
+  /* Place cards */
+  .place-listing-place-card {
+    background: #f8f8f8;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .place-listing-place-card:hover {
+    background: #e9f4ff;
+    transform: translateY(-2px);
+  }
+
+  .place-listing-place-name {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .place-listing-place-region {
+    font-size: 0.9em;
+    color: #666;
+  }
+
+  /* Map */
+  #place-listing-map {
+    flex: 1;
+    height: 100%;
+  }
+
+  /* Responsive: stack columns on small screens */
+  @media (max-width: 768px) {
+    .place-listing-container {
+      flex-direction: column;
+      height: 100vh;
+    }
+    #place-listing-map {
+      height: 60%; /* 60% of viewport height */
+      width: 100%;
+    }
+    .place-listing-sidebar {
+      height: 40%; /* 40% of viewport height */
+      width: 100%;
+      border-right: none;
+      border-top: 1px solid #ddd;
+      overflow-y: auto;
+    }
+  }
+</style>
+
+<div class="place-listing-container">
+  <div id="place-listing-map"></div>
+  <div class="place-listing-sidebar" id="place-listing-placesList"></div>
+</div>
+
+<!-- Leaflet JS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// Fetch places from Django context
+const places = {{ places|safe }};
+
+// Define Nepal bounds
+const nepalBounds = [
+  [26.347, 80.058],  // southwest corner
+  [30.447, 88.201]   // northeast corner
+];
+
+// Initialize map with bounds restriction
+const map = L.map("place-listing-map", {
+  maxBounds: nepalBounds,
+  maxBoundsViscosity: 1.0
+}).setView([28.233, 83.982], 7);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 18,
+  attribution: "&copy; OpenStreetMap contributors",
+}).addTo(map);
+
+let marker;
+
+const placesList = document.getElementById("place-listing-placesList");
+
+places.forEach((place) => {
+  const card = document.createElement("div");
+  card.classList.add("place-listing-place-card");
+  card.innerHTML = `
+    <div class="place-listing-place-name">${place.name}</div>
+    <div class="place-listing-place-region">${place.region}</div>
+  `;
+
+  // Hover: show marker
+  card.addEventListener("mouseenter", () => {
+    if (marker) map.removeLayer(marker);
+
+    marker = L.marker([place.latitude, place.longitude])
+      .addTo(map)
+      .bindPopup(`<b>${place.name}</b><br>${place.region}`)
+      .openPopup();
+
+    map.setView([place.latitude, place.longitude], 13);
+  });
+
+  // Click: redirect to place detail
+  card.addEventListener("click", () => {
+    window.location.href = `/place/${place.id}/`; // Django URL pattern
+    // or use: window.location.href = "{% url 'place_detail' 0 %}".replace('0', place.id);
+  });
+
+  placesList.appendChild(card);
+});
+</script>
+
+{% endblock %}

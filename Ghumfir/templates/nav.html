@@ -3,6 +3,14 @@
     <div class="nav-left"><a href="{% url 'home' %}">Ghumfir <img src="{% static 'images/logo.png' %}" alt="logo"
                 height="32px"></a>
     </div>
+    {% if top_header %}
+    <div class="top-header">
+        <a href="{% url 'home' %}"><i class="bi bi-house"></i></a>
+        <a href="{% url 'place_listing' %}"><i class="bi bi-map"></i></a>
+        <a href="{% url 'guide_listing' %}"><i class="bi bi-people"></i></a>
+        <a href="{% url 'memory_capsule' %}"><i class="bi bi-camera"></i></a>
+    </div>
+    {% endif %}
     <ul class="nav-right">
         {% if user.is_authenticated %}
         <!-- <span class="notification-icon"><i class="bi bi-bell-fill" for="notification"></i><span class="notification-count">1</span></span> -->
@@ -36,12 +44,13 @@
 <div class="profile-card" id="profileCard">
     {% if user.is_authenticated %}
     {% if user.profile_picture %}
-        <div class="profile-circle-big" style="background: url('{{ user.profile_picture.url }}') center center / cover no-repeat;">
-        </div>
-        {% else %}
-        <div class="profile-circle-big" style="background-color: #222222;">
-            {{ user.first_name|slice:":1"|capfirst }}
-        </div>
+    <div class="profile-circle-big"
+        style="background: url('{{ user.profile_picture.url }}') center center / cover no-repeat;">
+    </div>
+    {% else %}
+    <div class="profile-circle-big" style="background-color: #222222;">
+        {{ user.first_name|slice:":1"|capfirst }}
+    </div>
     {% endif %}
     {% if user.first_name and user.last_name %}
     <h4>{{user.first_name}} {{user.last_name}}</h4>

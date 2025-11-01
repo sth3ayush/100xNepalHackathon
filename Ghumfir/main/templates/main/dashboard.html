@@ -4,23 +4,24 @@
 {% block content %}
 
 <section class="dashboard">
+
+
     <div class="welcome-text">
         <h2>Welcome, {% if user.first_name %} {{user.first_name}} {% else %} User {% endif %}</h2>
         <h4>Ready for your next adventure?</h4>
     </div>
 
-    <div class="hero-controls-home" style="padding-top: 16px;">
+    <form class="hero-controls-home" style="padding-top: 16px;" action="{% url 'dashboard' %}" method="get">
         <div class="searchbar-home" role="search">
             <button class="search-icon-btn-home" aria-label="Search">
                 <i class="bi bi-search"></i>
             </button>
-            <input id="search-home" type="search" placeholder="Search place, experience, or trail.."
-                autocomplete="off" />
+            <input id="search-home" type="search" placeholder="Search place.." autocomplete="off" name="q" />
         </div>
-    </div>
+    </form>
 
     <div class="welcome-container">
-        <form id="discoverForm" class="discover-places-wrapper" action="{% url 'dashboard' %}" method="get">
+        <form id="discoverForm" class="discover-places-wrapper" action="{% url 'place_listing' %}" method="get">
             <div class="discover-top">
                 <h2>Discover new place</h2>
                 {% csrf_token %}

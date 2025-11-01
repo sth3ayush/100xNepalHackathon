@@ -10,6 +10,7 @@ import os
 from datetime import datetime
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
+from fuzzywuzzy import process
 
 User = get_user_model()
 
@@ -101,27 +102,35 @@ def dashboard(request):
     return render(request, "main/dashboard.html", context)
 
 def memoryCapsule(request):
-    q = request.GET.get('q', '')
+    q = request.GET.get('q', '').strip()
 
+    # 🔍 Filter memories based on query
     memories = Memory.objects.filter(
         Q(location_name__icontains=q)
     ).prefetch_related('media')
 
-    memory_data = []
-    for memory in memories:
-        images = memory.media.all()
-        if images.exists():
-            memory_data.append({
-                'memory': memory,
-                'images': images,
-            })
+    # 🖼 Prepare memory data with at least one image
+    memory_data = [
+        {'memory': memory, 'images': memory.media.all()}
+        for memory in memories if memory.media.exists()
+    ]
 
-    memory_count = memories.count()
+    memory_count = len(memory_data)
+    suggestion = None
+
+    # 💡 Provide fuzzy search suggestion if no match found
+    if q and memory_count == 0:
+        all_names = list(Memory.objects.values_list('location_name', flat=True))
+        if all_names:
+            suggestion_result = process.extractOne(q, all_names, score_cutoff=70)
+            if suggestion_result:
+                suggestion = suggestion_result[0]
 
     context = {
         "memory_data": memory_data,
         "search_query": q,
         "memory_count": memory_count,
+        "suggestion": suggestion,
         "top_header": True
     }
     return render(request, "main/memory_capsule.html", context)

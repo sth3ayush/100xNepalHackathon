@@ -73,7 +73,7 @@
     const formData = new FormData();
     formData.append("video", blob, "sos_recording.webm");
 
-    fetch(window.location.origin + "/upload_sos_video/", {
+    fetch(window.location.origin + "/upload-sos-video/", {
       method: "POST",
       body: formData,
     })

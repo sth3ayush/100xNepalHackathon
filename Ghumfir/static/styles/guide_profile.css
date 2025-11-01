@@ -1,0 +1,168 @@
+:root {
+  --most-used-text-color: #222222;
+  --primary-text-color: #274c3f;
+  --secondary-text-color: #d4a52e;
+  --primary-bg-color: #f2f0ef;
+  --secondary-bg-color: #636b2f;
+}
+
+.guide-profile {
+  display: flex;
+  justify-content: center;
+}
+
+.guide-card {
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  overflow: hidden;
+}
+
+.guide-left {
+  flex: 1 1 280px;
+  background: #fff;
+  text-align: center;
+  padding: 30px 20px;
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+}
+
+.guide-photo {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.guide-basic-info {
+  color: #333;
+  font-size: 15px;
+}
+
+.guide-location,
+.guide-language {
+  margin: 6px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.guide-right {
+  flex: 2 1 600px;
+  padding: 30px 40px;
+  background: #f2f0ef;
+}
+
+.guide-right h2 {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.guide-id {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.guide-desc {
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.guide-license {
+  font-weight: 500;
+  color: #0c8040;
+  margin-bottom: 15px;
+}
+
+.guide-details {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.guide-rating {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 25px;
+}
+
+.guide-stats {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.guide-stats div {
+  text-align: center;
+}
+
+.guide-stats div h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #111;
+}
+
+.guide-stats div p {
+  color: #666;
+  font-size: 14px;
+}
+
+.message-btn {
+  background-color: var(--primary-text-color);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.message-btn:hover {
+  background-color: var(--secondary-bg-color);
+}
+
+@media (max-width: 900px) {
+  .guide-card {
+    flex-direction: column;
+  }
+
+  .guide-left {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .guide-photo {
+    width: 180px;
+    height: 180px;
+  }
+
+  .guide-right {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 600px) {
+  .guide-right h2 {
+    font-size: 22px;
+  }
+
+  .guide-stats {
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .message-btn {
+    width: 100%;
+  }
+}

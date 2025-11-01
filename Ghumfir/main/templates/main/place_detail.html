@@ -1,0 +1,170 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<section class="place-detail">
+  <!-- Top Map Section -->
+  <div class="map-header">
+    <div id="map"></div>
+    <div class="map-overlay">
+      <h1 class="place-title">{{ place.name }}</h1>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="container">
+    <div class="place-info">
+      <div class="info-cards">
+        <div class="info-card">
+          <h3>Overview</h3>
+          <div class="info-row"><strong>Type:</strong> {{ place.destination_type }}</div>
+          <div class="info-row"><strong>Popularity:</strong> {{ place.popularity }}</div>
+          <div class="info-row"><strong>Best Season:</strong> {{ place.best_season }}</div>
+          <div class="info-row"><strong>Duration:</strong> {{ place.duration_days }} days</div>
+          <div class="info-row"><strong>Altitude:</strong> {{ place.altitude_m }} m</div>
+          <div class="info-row"><strong>Difficulty:</strong> {{ place.difficulty }}</div>
+          <div class="info-row"><strong>Transport:</strong> {{ place.transportation_access }}</div>
+        </div>
+
+        <div class="info-card">
+          <h3>Facilities & Culture</h3>
+          <div class="info-row"><strong>Lodges/Hotels:</strong> {{ place.lodges_hotels }}</div>
+          <div class="info-row"><strong>Food:</strong> {{ place.food_availability }}</div>
+          <div class="info-row"><strong>Permit:</strong> {{ place.permit_required|yesno:"Yes,No" }}</div>
+          <div class="info-row"><strong>Emergency:</strong> {{ place.emergency_facilities }}</div>
+          <div class="info-row"><strong>Local Community:</strong> {{ place.local_community }}</div>
+          <div class="info-row"><strong>Culture:</strong> {{ place.cultural_attractions }}</div>
+          <div class="info-row"><strong>Language:</strong> {{ place.language_customs }}</div>
+          <div class="info-row"><strong>Traditions:</strong> {{ place.unique_traditions }}</div>
+          <div class="info-row"><strong>Adventure:</strong> {{ place.adventure_type }}</div>
+        </div>
+      </div>
+
+      <!-- Highlights -->
+      <div class="highlights">
+        {% if place.not_to_miss_spots %}
+        <div class="highlight-card">
+          <h4>Must Visit</h4>
+          <ul>
+            {% for spot in place.not_to_miss_spots.splitlines %}
+            <li>{{ spot }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        {% if place.wildlife_highlights %}
+        <div class="highlight-card">
+          <h4>Wildlife & Nature</h4>
+          <ul>
+            {% for highlight in place.wildlife_highlights.splitlines %}
+            <li>{{ highlight }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        {% if place.photography_hotspots %}
+        <div class="highlight-card">
+          <h4>Photography Hotspots</h4>
+          <ul>
+            {% for spot in place.photography_hotspots.splitlines %}
+            <li>{{ spot }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Routing Machine Plugin -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+/>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script>
+  const lat = {{ place.latitude|default:28.3949|floatformat }};
+  const lng = {{ place.longitude|default:84.1240|floatformat }};
+
+  // Define the bounds of Nepal (restrict movement)
+  const nepalBounds = L.latLngBounds([26.3, 80.0], [30.5, 88.5]);
+
+  // Initialize the map
+  const map = L.map('map', {
+    zoomControl: false,
+    minZoom: 6,
+    maxZoom: 13,
+    maxBounds: nepalBounds,
+    maxBoundsViscosity: 1.0,
+  }).setView([lat, lng], 8);
+
+  // Base layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+  }).addTo(map);
+
+  // Destination marker
+  const destinationMarker = L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup("<b>{{ place.name }}</b><br>{{ place.region }}");
+
+  // Prevent panning outside Nepal
+  map.on('drag', () => map.panInsideBounds(nepalBounds, { animate: false }));
+
+  // Get user location and draw route
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+
+        // Custom user marker
+        const userIcon = L.icon({
+          iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png',
+          iconSize: [28, 28],
+        });
+
+        const userMarker = L.marker([userLat, userLng], { icon: userIcon })
+          .addTo(map)
+          .bindPopup("📍 Your Location")
+          .openPopup();
+
+        // Routing control (disable waypoint markers)
+        L.Routing.control({
+          waypoints: [
+            L.latLng(userLat, userLng),
+            L.latLng(lat, lng),
+          ],
+          createMarker: function() { return null; }, // ✅ no extra markers
+          lineOptions: {
+            styles: [{ color: '#2b4eff', opacity: 0.9, weight: 5 }],
+          },
+          routeWhileDragging: false,
+          addWaypoints: false,
+          draggableWaypoints: false,
+          fitSelectedRoutes: true,
+          show: false,
+        }).addTo(map);
+      },
+      (error) => {
+        console.warn("Geolocation access denied or unavailable:", error.message);
+      }
+    );
+  } else {
+    console.warn("Geolocation not supported by this browser.");
+  }
+
+  setTimeout(() => { map.invalidateSize(); }, 500);
+</script>
+{% endblock %}

@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="{% static 'styles/login-signup.css' %}" />
 
   <link rel="stylesheet" href="{% static 'styles/user_profile.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/guide_profile.css' %}" />
 
   <link rel="stylesheet" href="{% static 'styles/memory_capsule.css' %}" />
 
@@ -30,7 +31,9 @@
 
   <link rel="stylesheet" href="{% static 'styles/SOS.css' %}" />
   <link rel="stylesheet" href="{% static 'styles/become_guide.css' %}" />
+<link rel="stylesheet" href="{% static 'styles/place_details.css' %}" />
   
+
 </head>
 
 <body>
@@ -39,13 +42,18 @@
 
     <div class="main-content">{% block content %} {% endblock %}</div>
   </div>
-  {% if display_footer %}
+
+  {% if bg_transparent %}
   <style>
     .navbar {
       background: transparent;
     }
   </style>
-  {% include 'footer.html' %} {% endif %}
+  {% endif %}
+
+  {% if display_footer %}
+  {% include 'footer.html' %}
+  {% endif %}
 </body>
 
 </html>

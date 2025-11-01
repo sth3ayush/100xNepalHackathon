@@ -20,7 +20,7 @@
             <i class="bi bi-list"></i>
         </div>
         {% else %}
-        <a href="#" class="mbl-delete">
+        <a href="{% url 'become_guide' %}" class="mbl-delete">
             <li>Become a Guide</li>
         </a>
         <a href="{% url 'login' %}" class="nav-btn">
@@ -61,7 +61,7 @@
     <a href="{% url 'home' %}" class="dropdown-item"><i class="bi bi-house me-1"></i> Home</a>
     <div class="dropdown-separator"></div>
 
-    <a href="#" class="dropdown-item">Become a Guide</a>
+    <a href="{% url 'become_guide' %}" class="dropdown-item">Become a Guide</a>
 
     <div class="dropdown-separator"></div>
 

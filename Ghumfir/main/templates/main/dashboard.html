@@ -77,7 +77,7 @@
 
         <div class="guide-card-grid">
             {% for guide in guides %}
-            <div class="guide-card">
+            <a href="{% url 'guide_profile' guide.id %}" class="guide-card">
                 <img src="{{guide.user.profile_picture.url}}" alt="Guide 1" class="guide-card-img">
                 <div class="guide-card-info">
                     <h3 class="guide-card-name">{{guide.user.first_name}} {{guide.user.last_name}}</h3>
@@ -85,7 +85,7 @@
                     <p class="guide-card-location">{{guide.primary_location}}</p>
                     <p class="guide-card-languages">{{guide.languages}}</p>
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
 

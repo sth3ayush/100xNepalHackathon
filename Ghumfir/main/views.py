@@ -9,6 +9,7 @@ from django.http import JsonResponse
 import os
 from datetime import datetime
 from django.db.models import Q
+from django.shortcuts import render, get_object_or_404
 
 User = get_user_model()
 
@@ -16,7 +17,7 @@ def home(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
 
-    context = {'display_footer': True}
+    context = {'display_footer': True, 'bg_transparent': True}
     return render(request, "main/home.html", context)
 
 def loginPage(request):
@@ -271,6 +272,7 @@ def guideListing(request):
 
     guides = GuideProfile.objects.filter(
         Q(primary_location__icontains=q) |
+        Q(secondary_location__icontains=q) |
         Q(user__first_name__icontains=q) |
         Q(languages__icontains=q) |
         Q(user__last_name__icontains=q)
@@ -283,3 +285,12 @@ def guideListing(request):
 
     context = {"guides": guides, 'display_footer': True, 'guide_count': guide_count, "search_query": q,}
     return render(request, "main/guide_listing.html", context)
+
+def guideProfile(request, pk):
+    guide = GuideProfile.objects.get(id=pk)
+    context = {'guide': guide}
+    return render(request, 'main/guide_profile.html', context)
+
+def place_detail(request, pk):
+    place = get_object_or_404(Place, pk=pk)
+    return render(request, 'main/place_detail.html', {'place': place})

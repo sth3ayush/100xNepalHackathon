@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="guide-profile">
+  <div class="guide-card">
+    <div class="guide-left">
+      <img src="{{guide.user.profile_picture.url}}" alt="Guide Photo" class="guide-photo">
+      <div class="guide-basic-info">
+        <p class="guide-location"><i class="bi bi-geo-alt-fill"></i> {{guide.primary_location}}</p>
+        <p class="guide-language"><i class="bi bi-translate"></i> {{guide.languages}}</p>
+      </div>
+    </div>
+
+    <!-- Right Section (Main Info) -->
+    <div class="guide-right">
+      <h2>I'm {{guide.user.first_name}} {{guide.user.last_name}}, your private guide in {{guide.primary_location}}</h2>
+      <p class="guide-id">Guide #{{guide.id}}</p>
+      <p class="guide-desc">
+       {{guide.description}}
+      </p>
+
+      <p class="guide-license">{% if guide.Licenced %}✅ Licensed Local Guide {% endif %}</p>
+
+      <ul class="guide-details">
+        <li><strong>Primary Location:</strong> {{guide.primary_location}}</li>
+        <li><strong>Secondary Location:</strong> {{guide.secondary_location}}</li>
+        <li><strong>Experience:</strong> {{guide.experience}}</li>
+        <li><strong>Languages:</strong> {{guide.languages}}</li>
+        {% if guide.specialization %}<li><strong>Specialization:</strong> {{guide.specialization}}</li>{% endif %}
+        <li><strong>Rate per Hour:</strong> NRP {{guide.rate_per_hour}}</li>
+      </ul>
+
+      <div class="guide-rating">
+        ⭐ <strong>{{guide.rating}}</strong>
+      </div>
+
+      <div class="guide-stats">
+        <div>
+          <h3>{{guide.trip_completed}}</h3>
+          <p>Tours Completed</p>
+        </div>
+         <div>
+          <h3>{{guide.trip_completed}}</h3>
+          <p>Reviews</p>
+        </div>
+      </div>
+
+      <button class="message-btn">Message {{guide.user.first_name}}</button>
+    </div>
+  </div>
+</section>
+{% endblock %}
